@@ -1,0 +1,28 @@
+.container, .ui-container{
+    width: 130px;
+    border: 1px solid black;
+    margin: 0 auto;
+}
+
+.ui-container{
+    display: flex;
+    height: 100px;
+}
+.ui-container > div{
+    justify-content: space-between;
+}
+.first-row, .second-row, .third-row, .forth-row{
+    display: flex;
+}
+
+.first-row > div > button, .second-row > div > button, .third-row > div > button, .forth-row > div > button{
+    background-color: white;
+    width: 30px;
+    height: 20px;
+    margin: 1px;
+}
+
+.equal > button{
+    background-color: dodgerblue !important;
+    color: white;
+}

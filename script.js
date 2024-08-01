@@ -1,155 +1,98 @@
 const firstNumber = document.querySelector(".first-number");
 const secondNumber = document.querySelector(".second-number");
 const operator = document.querySelector(".operator")
-const addButton = document.querySelector(".add");
-const subtractButton = document.querySelector(".subtract");
-const multiplyButton = document.querySelector(".multiply");
-const divideButton = document.querySelector(".divide");
-const zeroButton = document.querySelector(".zero")
-const oneButton = document.querySelector(".one")
-const twoButton = document.querySelector(".two")
-const threeButton = document.querySelector(".three")
-const fourButton = document.querySelector(".four")
-const fiveButton = document.querySelector(".five")
-const sixButton = document.querySelector(".six")
-const sevenButton = document.querySelector(".seven")
-const eightButton = document.querySelector(".eight")
-const nineButton = document.querySelector(".nine")
-const equalButton = document.querySelector(".equal")
-const clearButton = document.querySelector(".clear")
-
-
+const container = document.querySelector(".container");
 let totalSum = 0;
 let flag = false;
 
-zeroButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 0;
-    else firstNumber.innerHTML += 0;
-    
-    if(Number(secondNumber.innerHTML) === 0) {
-        secondNumber.innerHTML = "";
-        alert("Can't divide by 0!!!")
+
+container.addEventListener("click", (event) => {
+    const btn = event.target.innerHTML;
+    btn === "+" || btn === "-" || btn === "*" || btn === "/" ? calculatorButtons.mathButton(btn) : btn === "=" ?
+    calculatorButtons.equalButton() : btn === "C" ? calculatorButtons.clearButton() : calculatorButtons.numberButton(Number(btn));
+    // switch(btn){
+    //     case "+":
+    //         calculatorButtons.mathButton(btn);
+    //         break;
+    //     case "-":
+    //         calculatorButtons.mathButton(btn);
+    //         break;
+    //     case "*":
+    //         calculatorButtons.mathButton(btn);
+    //         break;
+    //     case "/":
+    //         calculatorButtons.mathButton(btn);
+    //         break;
+    //     case "=":
+    //         calculatorButtons.equalButton();
+    //         break;
+    //     case "C":
+    //         calculatorButtons.clearButton();
+    //     default:
+    //         calculatorButtons.numberButton(Number(btn));
+    // }
+})
+
+const calculatorButtons = function() {
+    const numberButton = function(num){
+        if(flag) secondNumber.innerHTML += num;
+        else firstNumber.innerHTML += num;
+        
+        if(num === 0 && firstNumber.innerHTML > 0 && Number(secondNumber.innerHTML) === 0) {
+            secondNumber.innerHTML = "";
+            alert("Can't divide by 0!!!")
+        }
     }
-})
-oneButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 1;
-    else firstNumber.innerHTML += 1;
-})
-twoButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 2;
-    else firstNumber.innerHTML += 2;
-})
-threeButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 3;
-    else firstNumber.innerHTML += 3;
-})
-fourButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 4;
-    else firstNumber.innerHTML += 4;
-})
-fiveButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 5;
-    else firstNumber.innerHTML += 5;
-})
-sixButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 6;
-    else firstNumber.innerHTML += 6;
-})
-sevenButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 7;
-    else firstNumber.innerHTML += 7;
-})
-eightButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 8;
-    else firstNumber.innerHTML += 8;
-})
-nineButton.addEventListener("click", () => {
-    if(flag) secondNumber.innerHTML += 9;
-    else firstNumber.innerHTML += 9;
-})
+    const mathButton = function(e){
+        if(Number(firstNumber.innerHTML) > 0){
+            operator.innerHTML = e;
+        }
+        else {
+            calculatorButtons.clearButton();
+            alert("Add a value first!!!");
+        }
 
-addButton.addEventListener("click", () => {
-    if(Number(firstNumber.innerHTML) > 0){
-        operator.innerHTML = "+";
+        
+        if(flag) getTotalSum();
+        flag = true;
     }
-    else alert("Add a value first!!!");
-    
-    if(flag) getTotalSum();
-    flag = true;
-})
-subtractButton.addEventListener("click", () => {
-    if(Number(firstNumber.innerHTML) > 0){
-        operator.innerHTML = "-";
+    const equalButton = function(){
+        if(!flag) alert("Error")
+        
+        else {
+            getTotalSum();
+            operator.innerHTML = "";
+        }
     }
-    else alert("Add a value first!!!");
-    
-    if(flag) getTotalSum();
-    flag = true;
-})
-multiplyButton.addEventListener("click", () => {
-    if(Number(firstNumber.innerHTML) > 0){
-        operator.innerHTML = "*";
+    const clearButton = function(){
+        totalSum = 0;
+        flag = false;
+        firstNumber.innerHTML = "";
     }
-    else alert("Add a value first!!!");
+    return {numberButton, mathButton, equalButton, clearButton}
+}();
 
-    if(flag) getTotalSum();
-    flag = true;
-})
-divideButton.addEventListener("click", () => {
-    if(Number(firstNumber.innerHTML) > 0){
-        operator.innerHTML = "/";
-    }
-    else alert("Add a value first!!!");
-    
-    if(flag) getTotalSum();
-    flag = true;
-})
+const calculator = function () {
+    const add = (num, secNum) => num + secNum;
+    const subtract = (num, secNum) => num - secNum;
+    const multiply = (num, secNum) => num * secNum;
+    const divide = (num, secNum) => num / secNum;
 
-equalButton.addEventListener("click", () => {
-    if(!flag) alert("Error")
-    
-    else {
-        getTotalSum();
-        operator.innerHTML = "";
-    }
-})
-
-clearButton.addEventListener("click", () => {
-    totalSum = 0;
-    flag = false;
-    firstNumber.innerHTML = "";
-})
-
-
-
-function add (num, secNum) {
-    return Number(num) + Number(secNum);
-}
-
-function subtract (num, secNum) {
-    return Number(num) - Number(secNum);
-}
-
-function multiply (num, secNum) {
-    return Number(num) * Number(secNum);
-}
-
-function divide (num, secNum) {
-    return Number(num) / Number(secNum);
-}
+    return {add, subtract, multiply, divide};
+}();
 
 function operate (num, secNum, operator) {
     if(operator === "+"){
-        return add(num, secNum);
+        return calculator.add(num, secNum);
     }
     if(operator === "-"){
-        return subtract(num, secNum);
+        return calculator.subtract(num, secNum);
     }
     if(operator === "*"){
-        return multiply(num, secNum);
+        return calculator.multiply(num, secNum);
     }
     if(operator === "/"){
-        return divide(num, secNum);
+        return calculator.divide(num, secNum);
     }
 }
 
